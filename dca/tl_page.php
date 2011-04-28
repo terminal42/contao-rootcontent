@@ -29,18 +29,12 @@
 
 
 /**
- * Config
- */
-$GLOBALS['TL_DCA']['tl_page']['config']['ctable'][] = 'tl_page_content';
-
-
-/**
  * Operations
  */
 $GLOBALS['TL_DCA']['tl_page']['list']['operations']['articles']['button_callback'][0] = 'tl_page_rootcontent';
 
 
-class tl_page_rootcontent extends Backend
+class tl_page_rootcontent extends tl_page
 {
 	
 	/**
@@ -56,11 +50,10 @@ class tl_page_rootcontent extends Backend
 	{
 		if ($row['type'] == 'root')
 		{
-			return '<a href="' . $this->addToUrl('&amp;table=tl_page_content&amp;id='.$row['id']) . '" title="'.specialchars($GLOBALS['TL_LANG']['tl_page']['rootcontent'][1]).'">'.$this->generateImage($icon, $GLOBALS['TL_LANG']['tl_page']['rootcontent'][0]).'</a> ';
+			return '<a href="' . $this->addToUrl($href.'&amp;node='.$row['id']) . '" title="'.specialchars($title).'">'.$this->generateImage($icon, $label).'</a> ';
 		}
 		
-		$objDCA = new tl_page();
-		return $objDCA->editArticles($row, $href, $label, $title, $icon);
+		return parent::editArticles($row, $href, $label, $title, $icon);
 	}
 }
 

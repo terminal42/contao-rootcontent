@@ -29,7 +29,7 @@
 
 
 /**
- * Buttons
+ * Fields
  */
-$GLOBALS['TL_LANG']['tl_page']['rootcontent'] = array('Root Content', 'Edit content sections for this root page');
+$GLOBALS['TL_LANG']['tl_article']['rootcontent'] = array('Content Section', 'Please select a content section.');
 

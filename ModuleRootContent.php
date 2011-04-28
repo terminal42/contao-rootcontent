@@ -59,20 +59,26 @@ class ModuleRootContent extends Module
 			return $objTemplate->parse();
 		}
 		
-		global $objPage;
-		
-		$this->objContent = $this->Database->prepare("SELECT * FROM tl_page_content WHERE pid=? AND section=?")->execute($objPage->rootId, $this->rootcontent);
-		
-		if (!$this->objContent->numRows)
-			return '';
-		
 		return parent::generate();
 	}
 	
 	
+	/**
+	 * Abstract in parent...
+	 */
 	protected function compile()
 	{
-		$this->Template->text = $this->objContent->text;
+		global $objPage;
+		
+		$objArticle = $this->Database->prepare("SELECT * FROM tl_article WHERE pid=? AND title=? AND published='1'")->limit(1)->execute($objPage->rootId, $this->rootcontent);
+		
+		if (!$objArticle->numRows)
+		{
+			return '';
+		}
+		
+		$objArticle = new ModuleArticle($objArticle, 'main');
+		$this->Template->article = $objArticle->generate(true);
 	}
 }
 

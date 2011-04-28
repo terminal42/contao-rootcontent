@@ -29,12 +29,6 @@
 
 
 /**
- * Backend modules
- */
-$GLOBALS['BE_MOD']['design']['page']['tables'][] = 'tl_page_content';
-
-
-/**
  * Frontend modules
  */
 $GLOBALS['FE_MOD']['miscellaneous']['rootcontent'] = 'ModuleRootContent';

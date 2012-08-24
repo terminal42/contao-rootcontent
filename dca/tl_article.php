@@ -10,12 +10,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation, either
  * version 3 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program. If not, please visit the Free
  * Software Foundation website at <http://www.gnu.org/licenses/>.
@@ -45,13 +45,13 @@ class tl_article_rootcontent extends tl_article
 	{
 		if ($table == $GLOBALS['TL_DCA'][$dc->table]['config']['ptable'] && $row['type'] == 'root' && ($this->User->isAdmin || $this->User->isAllowed(5, $row)) && !$cr)
 		{
-			$objTheme = $this->Database->execute("SELECT tl_theme.* FROM tl_theme LEFT JOIN tl_layout ON tl_theme.id=tl_layout.pid WHERE tl_layout.id=".$row['layout']);
-				
+			$objTheme = $this->Database->execute("SELECT tl_theme.* FROM tl_theme LEFT JOIN tl_layout ON tl_theme.id=tl_layout.pid WHERE tl_layout.id=".(int) $row['layout']);
+
 			$objSections = $this->Database->execute("SELECT * FROM tl_article WHERE pid=" . $row['id']);
 			$arrSections = deserialize($objTheme->rootcontent, true);
-			
+
 			$arrSections = array_diff($arrSections, $objSections->fetchEach('title'));
-			
+
 			if (count($arrSections))
 			{
 				return '<a href="'.$this->addToUrl('act='.$arrClipboard['mode'].'&amp;mode=2&amp;pid='.$row['id'].(!is_array($arrClipboard['id']) ? '&amp;id='.$arrClipboard['id'] : '')).'" title="'.specialchars(sprintf($GLOBALS['TL_LANG'][$dc->table]['pasteinto'][1], $row['id'])).'" onclick="Backend.getScrollOffset();">'.$this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$dc->table]['pasteinto'][1], $row['id']), 'class="blink"').'</a> ';
@@ -66,17 +66,17 @@ class tl_article_rootcontent extends tl_article
 			$objPage = $this->Database->prepare("SELECT * FROM tl_page WHERE id=?")
 								  ->limit(1)
 								  ->execute($row['pid']);
-			
+
 			if ($objPage->type == 'root')
 			{
 				return $this->generateImage('pasteafter_.gif', '', 'class="blink"').' ';
 			}
 		}
-		
+
 		return parent::pasteArticle($dc, $row, $table, $cr, $arrClipboard);
 	}
-	
-	
+
+
 	/**
 	 * If the article is in a root page, we show a select menu instead of article name
 	 */
@@ -85,16 +85,16 @@ class tl_article_rootcontent extends tl_article
 		if ($this->Input->get('act') == 'edit')
 		{
 			$objPage = $this->Database->execute("SELECT tl_page.* FROM tl_article LEFT JOIN tl_page ON tl_article.pid=tl_page.id WHERE tl_article.id={$dc->id}");
-			
+
 			if ($objPage->type == 'root')
 			{
 				$GLOBALS['TL_DCA']['tl_article']['palettes']['default'] = '{title_legend},title,author;{expert_legend:hide},cssID;{publish_legend},published';
-				
+
 				$objTheme = $this->Database->execute("SELECT tl_theme.* FROM tl_theme LEFT JOIN tl_layout ON tl_theme.id=tl_layout.pid WHERE tl_layout.id=".$objPage->layout);
-				
+
 				$objSections = $this->Database->execute("SELECT * FROM tl_article WHERE pid=" . $objPage->id . " AND id!=" . $dc->id);
 				$arrSections = deserialize($objTheme->rootcontent, true);
-				
+
 				$arrSections = array_diff($arrSections, $objSections->fetchEach('title'));
 
 				$GLOBALS['TL_DCA']['tl_article']['fields']['title'] = array

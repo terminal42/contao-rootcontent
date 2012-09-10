@@ -73,6 +73,13 @@ class tl_article_rootcontent extends tl_article
 			}
 		}
 
+		// Allow Avisota to override it's paste button
+		if (in_array('Avisota', $this->Config->getActiveModules()))
+		{
+			$objDCA = new tl_article_avisota();
+			return $objDCA->pasteArticle($dc, $row, $table, $cr, $arrClipboard);
+		}
+
 		return parent::pasteArticle($dc, $row, $table, $cr, $arrClipboard);
 	}
 

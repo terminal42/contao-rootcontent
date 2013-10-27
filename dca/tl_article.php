@@ -43,7 +43,7 @@ class tl_article_rootcontent extends tl_article
 	 */
 	public function pasteArticle(DataContainer $dc, $row, $table, $cr, $arrClipboard=false)
 	{
-		if ($table == $GLOBALS['TL_DCA'][$dc->table]['config']['ptable'] && $row['type'] == 'root' && ($this->User->isAdmin || $this->User->isAllowed(5, $row)) && !$cr)
+		if ($table == $GLOBALS['TL_DCA'][$dc->table]['config']['ptable'] && $row['type'] == 'root' && (\BackendUser::getInstance()->isAdmin || \BackendUser::getInstance()->isAllowed(5, $row)) && !$cr)
 		{
 			$objTheme = $this->Database->execute("SELECT tl_theme.* FROM tl_theme LEFT JOIN tl_layout ON tl_theme.id=tl_layout.pid WHERE tl_layout.id=".(int) $row['layout']);
 

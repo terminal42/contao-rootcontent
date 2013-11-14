@@ -69,8 +69,9 @@ class ModuleRootContent extends Module
 	protected function compile()
 	{
 		global $objPage;
+		$time = time();
 		
-		$objArticle = $this->Database->prepare("SELECT * FROM tl_article WHERE pid=? AND title=? AND published='1'")->limit(1)->execute($objPage->rootId, $this->rootcontent);
+		$objArticle = $this->Database->prepare("SELECT * FROM tl_article WHERE pid=? AND title=?" . (BE_USER_LOGGED_IN ? '' : " AND published='1' AND (start='' OR start<?) AND (stop='' OR stop>?)"))->limit(1)->execute($objPage->rootId, $this->rootcontent, $time, $time);
 		
 		if (!$objArticle->numRows)
 		{

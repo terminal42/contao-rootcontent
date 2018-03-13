@@ -1,0 +1,34 @@
+{
+    "name": "terminal42/contao-rootcontent",
+    "description": "Contao bundle that allows to add articles to the root page.",
+    "type": "contao-bundle",
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "terminal42 gmbh",
+            "homepage": "https://www.terminal42.ch/"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "contao/core-bundle": "^4.5"
+    },
+    "require-dev": {
+        "contao/manager-plugin": "^2.0",
+        "php-http/guzzle6-adapter": "^1.1"
+    },
+    "conflict": {
+        "contao/manager-plugin": "<2.0 || >=3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Terminal42\\RootcontentBundle\\": "src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "1.0.x-dev"
+        },
+        "contao-manager-plugin": "Terminal42\\RootcontentBundle\\ContaoManager\\Plugin"
+    }
+}

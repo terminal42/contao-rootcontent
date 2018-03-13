@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Terminal42\RootcontentBundle\EventListener;
 
 use Contao\Backend;
@@ -57,20 +59,19 @@ class ArticleSectionListener
         if ('root' === $page['type']) {
             $GLOBALS['TL_DCA']['tl_article']['palettes']['default'] = '{title_legend},title,author;{expert_legend:hide},cssID;{publish_legend},published';
 
-            $theme = $this->getTheme($page['layout']);
+            $theme = $this->getTheme((int) $page['layout']);
 
             $sections = array_diff(
                 StringUtil::deserialize($theme['rootcontent'], true),
-                $this->getExistingSections((int) $page['id'], $dc->id)
+                $this->getExistingSections((int) $page['id'], (int) $dc->id)
             );
 
-            $GLOBALS['TL_DCA']['tl_article']['fields']['title'] = array
-            (
-                'label'		=> &$GLOBALS['TL_LANG']['tl_article']['rootcontent'],
-                'inputType'	=> 'select',
-                'options'	=> array_values($sections),
-                'eval'		=> array('mandatory'=>true, 'includeBlankOption'=>true),
-            );
+            $GLOBALS['TL_DCA']['tl_article']['fields']['title'] = [
+                'label'     => &$GLOBALS['TL_LANG']['tl_article']['rootcontent'],
+                'inputType' => 'select',
+                'options'   => array_values($sections),
+                'eval'      => ['mandatory'=>true, 'includeBlankOption'=>true, 'tl_class' => 'w50'],
+            ];
         }
     }
 
@@ -91,7 +92,7 @@ class ArticleSectionListener
 
             $sections = array_diff(
                 StringUtil::deserialize($theme['rootcontent'], true),
-                $this->getExistingSections((int) $row['pid'], $dc->id)
+                $this->getExistingSections((int) $row['pid'], (int) $dc->id)
             );
 
             if (!empty($sections)) {
@@ -112,34 +113,34 @@ class ArticleSectionListener
         return (new \tl_article())->pasteArticle($dc, $row, $table, $circularReference, $arrClipboard);
     }
 
-    private function getPage($articleId): array
+    private function getPage($articleId): ?array
     {
         $qb = $this->database->createQueryBuilder();
 
         $qb
             ->select('tl_page.*')
             ->from('tl_article')
-            ->join('tl_article', 'tl_page', 'tl_article.pid=tl_page.id')
+            ->leftJoin('tl_article', 'tl_page', 'tl_page', 'tl_article.pid=tl_page.id')
             ->where('tl_article.id = :articleId')
             ->setParameter('articleId', $articleId)
         ;
 
-        return $qb->execute()->fetch();
+        return $qb->execute()->fetch() ?: null;
     }
 
-    private function getTheme(int $layoutId): array
+    private function getTheme(int $layoutId): ?array
     {
         $qb = $this->database->createQueryBuilder();
 
         $qb
             ->select('tl_theme.*')
             ->from('tl_theme')
-            ->join('tl_layout', 'tl_layout', 'tl_theme.id=tl_layout.pid')
+            ->leftJoin('tl_theme', 'tl_layout', 'tl_layout', 'tl_theme.id=tl_layout.pid')
             ->where('tl_layout.id = :layout_id')
             ->setParameter('layout_id', $layoutId)
         ;
 
-        return $qb->execute()->fetch();
+        return $qb->execute()->fetch() ?: null;
     }
 
     private function getExistingSections(int $pageId, int $articleId = 0): array

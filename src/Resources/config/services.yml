@@ -2,7 +2,7 @@ services:
     terminal42_rootcontent.controller.rootcontent_module:
         class: Terminal42\RootcontentBundle\Controller\RootcontentController
         arguments: ["@contao.framework", "@contao.routing.scope_matcher", "@database_connection", "@security.token_storage"]
-        tags: [{ name: content.frontend_module, category: miscellaneous }]
+        tags: [{ name: contao.frontend_module, category: miscellaneous }]
 
     terminal42_rootcontent.listener.article_operation:
         class: Terminal42\RootcontentBundle\EventListener\ArticleOperationListener

@@ -74,7 +74,7 @@ class RootcontentController
         /** @var PageModel $objPage */
         global $objPage;
 
-        $article = $this->getArticle($objPage->roodId, $module->rootcontent);
+        $article = $this->getArticle($objPage->rootId, $module->rootcontent);
 
         if (null === $article) {
             return '';
@@ -96,7 +96,7 @@ class RootcontentController
 
         if (!$token instanceof FrontendPreviewToken || !$token->showUnpublished()) {
             $time = Date::floorToMinute();
-            $cols[] = "published='1' AND (start='' OR start<$time) AND (stop='' OR stop>$time)";
+            $cols[] = "tl_article.published='1' AND (tl_article.start='' OR tl_article.start<$time) AND (tl_article.stop='' OR tl_article.stop>$time)";
         }
 
         return $repository->findOneBy(

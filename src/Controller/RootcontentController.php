@@ -77,7 +77,7 @@ class RootcontentController
         $article = $this->getArticle($objPage->rootId, $module->rootcontent);
 
         if (null === $article) {
-            return '';
+            return new Response('', Response::HTTP_NO_CONTENT);
         }
 
         $module = $this->framework->createInstance(ModuleArticle::class, [$article, $section]);

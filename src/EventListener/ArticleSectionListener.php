@@ -78,7 +78,7 @@ class ArticleSectionListener
     /**
      * Overrides parent function, allow paste for root pages
      */
-    public function onPasteButton(DataContainer $dc, array $row, string $table, bool $circularReference, $arrClipboard = false): string
+    public function onPasteButton(DataContainer $dc, array $row, string $table, $circularReference, $arrClipboard = false): string
     {
         $user = ($token = $this->tokenStorage->getToken()) ? $token->getUser() : null;
 

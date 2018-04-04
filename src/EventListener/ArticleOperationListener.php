@@ -27,7 +27,7 @@ class ArticleOperationListener
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function onButtonCallback(array $row, string $href, string $label, string $title, string $icon): string
+    public function onButtonCallback(array $row, $href, $label, $title, $icon): string
     {
         $user = ($token = $this->tokenStorage->getToken()) ? $token->getUser() : null;
 

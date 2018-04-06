@@ -75,6 +75,7 @@ class ArticleSectionListener
         }
     }
 
+    /** @noinspection MoreThanThreeArgumentsInspection */
     /**
      * Overrides parent function, allow paste for root pages
      */
@@ -92,7 +93,7 @@ class ArticleSectionListener
 
             $sections = array_diff(
                 StringUtil::deserialize($theme['rootcontent'], true),
-                $this->getExistingSections((int) $row['pid'], (int) $dc->id)
+                $this->getExistingSections((int) $row['id'])
             );
 
             if (!empty($sections)) {
@@ -110,6 +111,7 @@ class ArticleSectionListener
             }
         }
 
+        /** @noinspection PhpParamsInspection */
         return (new \tl_article())->pasteArticle($dc, $row, $table, $circularReference, $arrClipboard);
     }
 

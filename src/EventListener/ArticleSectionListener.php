@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * rootcontent extension for Contao Open Source CMS
+ *
+ * @copyright  Copyright (c) 2018, terminal42 gmbh
+ * @author     terminal42 gmbh <info@terminal42.ch>
+ * @license    LGPL-3.0-or-later
+ * @link       http://github.com/terminal42/contao-asset-reload
+ */
+
 namespace Terminal42\RootcontentBundle\EventListener;
 
 use Contao\Backend;
@@ -44,9 +53,9 @@ class ArticleSectionListener
     }
 
     /**
-     * If the article is in a root page, we show a select menu instead of article name
+     * If the article is in a root page, we show a select menu instead of article name.
      */
-    public function onLoad(DataContainer $dc)
+    public function onLoad(DataContainer $dc): void
     {
         $request = $this->requestStack->getCurrentRequest();
 
@@ -67,23 +76,27 @@ class ArticleSectionListener
             );
 
             $GLOBALS['TL_DCA']['tl_article']['fields']['title'] = [
-                'label'     => &$GLOBALS['TL_LANG']['tl_article']['rootcontent'],
+                'label' => &$GLOBALS['TL_LANG']['tl_article']['rootcontent'],
                 'inputType' => 'select',
-                'options'   => array_values($sections),
-                'eval'      => ['mandatory'=>true, 'includeBlankOption'=>true, 'tl_class' => 'w50'],
+                'options' => array_values($sections),
+                'eval' => ['mandatory' => true, 'includeBlankOption' => true, 'tl_class' => 'w50'],
             ];
         }
     }
 
     /** @noinspection MoreThanThreeArgumentsInspection */
+
     /**
-     * Overrides parent function, allow paste for root pages
+     * Overrides parent function, allow paste for root pages.
+     *
+     * @param mixed $circularReference
+     * @param mixed $arrClipboard
      */
     public function onPasteButton(DataContainer $dc, array $row, string $table, $circularReference, $arrClipboard = false): string
     {
         $user = ($token = $this->tokenStorage->getToken()) ? $token->getUser() : null;
 
-        if ($table === $GLOBALS['TL_DCA'][$dc->table]['config']['ptable']
+        if ($GLOBALS['TL_DCA'][$dc->table]['config']['ptable'] === $table
             && 'root' === $row['type']
             && $user instanceof BackendUser
             && ($user->isAdmin || $user->isAllowed(5, $row))
@@ -103,7 +116,7 @@ class ArticleSectionListener
             return Backend::generateImage('pasteinto_.gif', '', 'class="blink"').' ';
         }
 
-        if ($table == $dc->table) {
+        if ($table === $dc->table) {
             $page = $this->getPage((int) $row['pid']);
 
             if ('root' === $page['type']) {
@@ -111,7 +124,7 @@ class ArticleSectionListener
             }
         }
 
-        /** @noinspection PhpParamsInspection */
+        /* @noinspection PhpParamsInspection */
         return (new \tl_article())->pasteArticle($dc, $row, $table, $circularReference, $arrClipboard);
     }
 

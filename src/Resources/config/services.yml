@@ -15,3 +15,7 @@ services:
     terminal42_rootcontent.listener.module_sections:
         class: Terminal42\RootcontentBundle\EventListener\ModuleSectionsListener
         arguments: ["@request_stack", "@database_connection"]
+
+    Terminal42\RootcontentBundle\EventListener\RootLimitListener:
+        arguments: ["@database_connection"]
+        tags: [{ name: contao.hook, hook: isVisibleElement }]

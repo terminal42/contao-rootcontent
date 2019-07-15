@@ -41,3 +41,7 @@ For each front end module, there is a new setting to limit it for one
 or multiple root pages. This way you can create language-aware modules.
 Simply place all of them in your page layout and only the respective
 ones will be rendered one at a time.
+
+### `<body>` css class per root page
+
+Add css classes to the page root and they will be inherited through all pages.

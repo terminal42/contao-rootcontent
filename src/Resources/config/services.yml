@@ -28,3 +28,7 @@ services:
         arguments: ["@database_connection"]
         public: true
         tags: [{ name: contao.hook, hook: isVisibleElement }]
+
+    Terminal42\RootcontentBundle\EventListener\RootCssClassListener:
+        public: true
+        tags: [{ name: contao.hook, hook: generatePage }]

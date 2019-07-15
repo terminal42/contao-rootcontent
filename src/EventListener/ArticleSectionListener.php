@@ -5,10 +5,10 @@ declare(strict_types=1);
 /*
  * rootcontent extension for Contao Open Source CMS
  *
- * @copyright  Copyright (c) 2018, terminal42 gmbh
+ * @copyright  Copyright (c) 2019, terminal42 gmbh
  * @author     terminal42 gmbh <info@terminal42.ch>
  * @license    LGPL-3.0-or-later
- * @link       http://github.com/terminal42/contao-asset-reload
+ * @link       http://github.com/terminal42/contao-rootcontent
  */
 
 namespace Terminal42\RootcontentBundle\EventListener;
@@ -110,7 +110,7 @@ class ArticleSectionListener
             );
 
             if (!empty($sections)) {
-                return '<a href="'.Backend::addToUrl('act='.$arrClipboard['mode'].'&amp;mode=2&amp;pid='.$row['id'].(!is_array($arrClipboard['id']) ? '&amp;id='.$arrClipboard['id'] : '')).'" title="'.StringUtil::specialchars(sprintf($GLOBALS['TL_LANG'][$dc->table]['pasteinto'][1], $row['id'])).'" onclick="Backend.getScrollOffset();">'.Backend::generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$dc->table]['pasteinto'][1], $row['id']), 'class="blink"').'</a> ';
+                return '<a href="'.Backend::addToUrl('act='.$arrClipboard['mode'].'&amp;mode=2&amp;pid='.$row['id'].(!\is_array($arrClipboard['id']) ? '&amp;id='.$arrClipboard['id'] : '')).'" title="'.StringUtil::specialchars(sprintf($GLOBALS['TL_LANG'][$dc->table]['pasteinto'][1], $row['id'])).'" onclick="Backend.getScrollOffset();">'.Backend::generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$dc->table]['pasteinto'][1], $row['id']), 'class="blink"').'</a> ';
             }
 
             return Backend::generateImage('pasteinto_.gif', '', 'class="blink"').' ';

@@ -17,21 +17,21 @@ use Contao\Backend;
 use Contao\BackendUser;
 use Contao\Image;
 use Contao\StringUtil;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ArticleOperationListener
 {
     /**
-     * @var TokenStorage
+     * @var TokenStorageInterface
      */
     private $tokenStorage;
 
     /**
      * Constructor.
      *
-     * @param TokenStorage $tokenStorage
+     * @param TokenStorageInterface $tokenStorage
      */
-    public function __construct(TokenStorage $tokenStorage)
+    public function __construct(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
     }

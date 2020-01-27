@@ -19,7 +19,7 @@ use Contao\DataContainer;
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ArticleSectionListener
 {
@@ -34,18 +34,18 @@ class ArticleSectionListener
     private $database;
 
     /**
-     * @var TokenStorage
+     * @var TokenStorageInterface
      */
     private $tokenStorage;
 
     /**
      * Constructor.
      *
-     * @param RequestStack $requestStack
-     * @param Connection   $database
-     * @param TokenStorage $tokenStorage
+     * @param RequestStack          $requestStack
+     * @param Connection            $database
+     * @param TokenStorageInterface $tokenStorage
      */
-    public function __construct(RequestStack $requestStack, Connection $database, TokenStorage $tokenStorage)
+    public function __construct(RequestStack $requestStack, Connection $database, TokenStorageInterface $tokenStorage)
     {
         $this->requestStack = $requestStack;
         $this->database = $database;

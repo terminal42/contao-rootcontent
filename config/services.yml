@@ -12,7 +12,7 @@ services:
         arguments:
             - '@request_stack'
             - '@database_connection'
-            - '@security.token_storage'
+            - '@security.helper'
 
     Terminal42\RootcontentBundle\EventListener\ModuleFieldListener: ~
 

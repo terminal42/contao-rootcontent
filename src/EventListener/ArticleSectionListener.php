@@ -11,19 +11,19 @@ use Contao\DataContainer;
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
 
 class ArticleSectionListener
 {
     private RequestStack $requestStack;
     private Connection $database;
-    private TokenStorageInterface $tokenStorage;
+    private Security $security;
 
-    public function __construct(RequestStack $requestStack, Connection $database, TokenStorageInterface $tokenStorage)
+    public function __construct(RequestStack $requestStack, Connection $database, Security $security)
     {
         $this->requestStack = $requestStack;
         $this->database = $database;
-        $this->tokenStorage = $tokenStorage;
+        $this->security = $security;
     }
 
     /**
@@ -70,9 +70,9 @@ class ArticleSectionListener
      */
     public function onPasteButton(DataContainer $dc, array $row, string $table, $circularReference, $arrClipboard = false): string
     {
-        $user = ($token = $this->tokenStorage->getToken()) ? $token->getUser() : null;
+        $user = $this->security->getUser();
 
-        if ($GLOBALS['TL_DCA'][$dc->table]['config']['ptable'] === $table
+        if ('tl_page' === $table
             && 'root' === $row['type']
             && $user instanceof BackendUser
             && ($user->isAdmin || $user->isAllowed(5, $row))
@@ -92,8 +92,8 @@ class ArticleSectionListener
             return Backend::generateImage('pasteinto_.gif', '', 'class="blink"').' ';
         }
 
-        if ($table === $dc->table) {
-            $page = $this->getPage((int) $row['pid']);
+        if ('tl_article' === $table) {
+            $page = $this->getPage((int) $row['id']);
 
             if ('root' === $page['type']) {
                 return Backend::generateImage('pasteafter_.gif', '', 'class="blink"').' ';

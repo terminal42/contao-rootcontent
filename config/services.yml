@@ -7,6 +7,8 @@ services:
     Terminal42\RootcontentBundle\Controller\RootcontentController:
         arguments:
             - '@contao.security.token_checker'
+        calls:
+            - [setContainer, ['@Psr\Container\ContainerInterface']]
 
     Terminal42\RootcontentBundle\EventListener\ArticleSectionListener:
         arguments:

@@ -2,17 +2,9 @@
 
 declare(strict_types=1);
 
-/*
- * rootcontent extension for Contao Open Source CMS
- *
- * @copyright  Copyright (c) 2019, terminal42 gmbh
- * @author     terminal42 gmbh <info@terminal42.ch>
- * @license    LGPL-3.0-or-later
- * @link       http://github.com/terminal42/contao-rootcontent
- */
-
 namespace Terminal42\RootcontentBundle\EventListener;
 
+use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\DataContainer;
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
@@ -20,28 +12,18 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ModuleSectionsListener
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
+    private Connection $database;
 
-    /**
-     * @var Connection
-     */
-    private $database;
-
-    /**
-     * Constructor.
-     *
-     * @param RequestStack $requestStack
-     * @param Connection   $database
-     */
     public function __construct(RequestStack $requestStack, Connection $database)
     {
         $this->requestStack = $requestStack;
         $this->database = $database;
     }
 
+    /**
+     * @Callback(table="tl_module", target="fields.rootcontent.options")
+     */
     public function onOptionsCallback(DataContainer $dc): array
     {
         $qb = $this->database->createQueryBuilder();
@@ -52,7 +34,7 @@ class ModuleSectionsListener
             ->setParameter('id', $this->getThemeId($dc))
         ;
 
-        return StringUtil::deserialize($qb->execute()->fetchColumn(), true);
+        return StringUtil::deserialize($qb->execute()->fetchOne(), true);
     }
 
     private function getThemeId(DataContainer $dc): int

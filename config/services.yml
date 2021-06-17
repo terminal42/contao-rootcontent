@@ -1,0 +1,34 @@
+services:
+    _defaults:
+        autoconfigure: true
+        autowire: false
+        public: false
+
+    Terminal42\RootcontentBundle\Controller\RootcontentController:
+        arguments:
+            - '@contao.security.token_checker'
+
+    Terminal42\RootcontentBundle\EventListener\ArticleSectionListener:
+        arguments:
+            - '@request_stack'
+            - '@database_connection'
+            - '@security.token_storage'
+
+    Terminal42\RootcontentBundle\EventListener\ModuleFieldListener: ~
+
+    Terminal42\RootcontentBundle\EventListener\ModuleSectionsListener:
+        arguments:
+            - '@request_stack'
+            - '@database_connection'
+
+    Terminal42\RootcontentBundle\EventListener\RootLimitListener:
+        arguments:
+            - '@database_connection'
+
+    Terminal42\RootcontentBundle\EventListener\RootCssClassListener: ~
+
+    Terminal42\RootcontentBundle\Routing\RootPageContentComposition:
+        autoconfigure: false # prevent from being added as page type
+        arguments:
+            - '@database_connection'
+            - '@request_stack'

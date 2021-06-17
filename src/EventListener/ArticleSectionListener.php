@@ -2,19 +2,11 @@
 
 declare(strict_types=1);
 
-/*
- * rootcontent extension for Contao Open Source CMS
- *
- * @copyright  Copyright (c) 2019, terminal42 gmbh
- * @author     terminal42 gmbh <info@terminal42.ch>
- * @license    LGPL-3.0-or-later
- * @link       http://github.com/terminal42/contao-rootcontent
- */
-
 namespace Terminal42\RootcontentBundle\EventListener;
 
 use Contao\Backend;
 use Contao\BackendUser;
+use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\DataContainer;
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
@@ -23,28 +15,10 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class ArticleSectionListener
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
+    private Connection $database;
+    private TokenStorageInterface $tokenStorage;
 
-    /**
-     * @var Connection
-     */
-    private $database;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * Constructor.
-     *
-     * @param RequestStack          $requestStack
-     * @param Connection            $database
-     * @param TokenStorageInterface $tokenStorage
-     */
     public function __construct(RequestStack $requestStack, Connection $database, TokenStorageInterface $tokenStorage)
     {
         $this->requestStack = $requestStack;
@@ -54,6 +28,8 @@ class ArticleSectionListener
 
     /**
      * If the article is in a root page, we show a select menu instead of article name.
+     *
+     * @Callback(table="tl_article", target="config.onload")
      */
     public function onLoad(DataContainer $dc): void
     {
@@ -84,13 +60,13 @@ class ArticleSectionListener
         }
     }
 
-    /** @noinspection MoreThanThreeArgumentsInspection */
-
     /**
      * Overrides parent function, allow paste for root pages.
      *
      * @param mixed $circularReference
      * @param mixed $arrClipboard
+     *
+     * @deprecated only used for Contao < 4.11
      */
     public function onPasteButton(DataContainer $dc, array $row, string $table, $circularReference, $arrClipboard = false): string
     {
@@ -124,7 +100,6 @@ class ArticleSectionListener
             }
         }
 
-        /* @noinspection PhpParamsInspection */
         return (new \tl_article())->pasteArticle($dc, $row, $table, $circularReference, $arrClipboard);
     }
 
@@ -140,7 +115,7 @@ class ArticleSectionListener
             ->setParameter('articleId', $articleId)
         ;
 
-        return $qb->execute()->fetch() ?: null;
+        return $qb->execute()->fetchAssociative() ?: null;
     }
 
     private function getTheme(int $layoutId): ?array
@@ -155,7 +130,7 @@ class ArticleSectionListener
             ->setParameter('layout_id', $layoutId)
         ;
 
-        return $qb->execute()->fetch() ?: null;
+        return $qb->execute()->fetchAssociative() ?: null;
     }
 
     private function getExistingSections(int $pageId, int $articleId = 0): array
@@ -171,6 +146,6 @@ class ArticleSectionListener
             ->setParameter('article_id', $articleId)
         ;
 
-        return $qb->execute()->fetchAll(\PDO::FETCH_COLUMN, 'title');
+        return $qb->execute()->fetchFirstColumn();
     }
 }

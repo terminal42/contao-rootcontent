@@ -1,24 +1,35 @@
 # Root content extension for Contao Open Source CMS
 
-The extension allows to create root-page aware content in your Contao layouts.
+The extension allows creating root-page aware content in Contao.
 
 
 ## Installation
 
-Install the bundle via Composer:
+Choose the installation method that matches your workflow!
 
+### Installation via Contao Manager
+
+Search for `terminal42/contao-pageimage` in the Contao Manager and add it
+to your installation. Apply changes to update the packages.
+
+### Manual installation
+
+Add a composer dependency for this bundle. Therefore, change in the project root
+and run the following:
+
+```bash
+composer require terminal42/contao-pageimage
 ```
-composer require terminal42/contao-rootcontent
-```
 
-## Configuration
+Depending on your environment, the command can differ, i.e. starting with
+`php composer.phar …` if you do not have composer installed globally.
 
-There's absolutely nothing to configure :-)
+Then, update the database via the `contao:migrate` command or the Contao install tool.
 
 
 ## Usage
 
-There are two options to create root-page aware content.
+There are multiple features to create root-page aware content.
 
 
 ### Create articles in the root page
@@ -42,6 +53,7 @@ or multiple root pages. This way you can create language-aware modules.
 Simply place all of them in your page layout and only the respective
 ones will be rendered one at a time.
 
+
 ### `<body>` css class per root page
 
-Add css classes to the page root and they will be inherited through all pages.
+Add css classes to the root page and they will be inherited through all pages.

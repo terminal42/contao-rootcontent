@@ -2,25 +2,22 @@
 
 declare(strict_types=1);
 
-/*
- * rootcontent extension for Contao Open Source CMS
- *
- * @copyright  Copyright (c) 2019, terminal42 gmbh
- * @author     terminal42 gmbh <info@terminal42.ch>
- * @license    LGPL-3.0-or-later
- * @link       http://github.com/terminal42/contao-rootcontent
- */
-
 namespace Terminal42\RootcontentBundle\EventListener;
 
+use Contao\CoreBundle\DataContainer\PaletteManipulator;
+use Contao\CoreBundle\ServiceAnnotation\Callback;
+
+/**
+ * @Callback(table="tl_module", target="config.onload")
+ */
 class ModuleFieldListener
 {
-    public function onLoadCallback(): void
+    public function __invoke(): void
     {
-        $pm = \Contao\CoreBundle\DataContainer\PaletteManipulator::create()->addField(
+        $pm = PaletteManipulator::create()->addField(
             'defineRootLimit',
             'protected_legend',
-            \Contao\CoreBundle\DataContainer\PaletteManipulator::POSITION_APPEND
+            PaletteManipulator::POSITION_APPEND
         );
 
         foreach ($GLOBALS['TL_DCA']['tl_module']['palettes'] as $name => $palette) {

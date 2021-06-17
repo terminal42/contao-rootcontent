@@ -2,45 +2,32 @@
 
 declare(strict_types=1);
 
-/*
- * rootcontent extension for Contao Open Source CMS
- *
- * @copyright  Copyright (c) 2019, terminal42 gmbh
- * @author     terminal42 gmbh <info@terminal42.ch>
- * @license    LGPL-3.0-or-later
- * @link       http://github.com/terminal42/contao-rootcontent
- */
-
 namespace Terminal42\RootcontentBundle\EventListener;
 
 use Contao\Backend;
-use Contao\BackendUser;
 use Contao\Image;
 use Contao\StringUtil;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
+use Terminal42\RootcontentBundle\DependencyInjection\Compiler\RootPageContentCompositionPass;
 
+/**
+ * @deprecated only used for Contao < 4.11
+ */
 class ArticleOperationListener
 {
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
+    private Security $security;
 
-    /**
-     * Constructor.
-     *
-     * @param TokenStorageInterface $tokenStorage
-     */
-    public function __construct(TokenStorageInterface $tokenStorage)
+    public function __construct(Security $security)
     {
-        $this->tokenStorage = $tokenStorage;
+        $this->security = $security;
     }
 
+    /**
+     * @see RootPageContentCompositionPass
+     */
     public function onButtonCallback(array $row, $href, $label, $title, $icon): string
     {
-        $user = ($token = $this->tokenStorage->getToken()) ? $token->getUser() : null;
-
-        if (!$user instanceof BackendUser || !$user->hasAccess('article', 'modules')) {
+        if (!$this->security->isGranted('contao_user.modules', 'article')) {
             return '';
         }
 

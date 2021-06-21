@@ -30,7 +30,7 @@ class RootcontentController extends AbstractFrontendModuleController
 
     protected function getResponse(Template $template, ModuleModel $model, Request $request): ?Response
     {
-        $pageModel = $request->attributes->get('pageModel');
+        $pageModel = $this->getPageModel();
 
         if (!$pageModel instanceof PageModel) {
             return new Response('');

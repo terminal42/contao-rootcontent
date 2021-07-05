@@ -9,7 +9,7 @@ Choose the installation method that matches your workflow!
 
 ### Installation via Contao Manager
 
-Search for `terminal42/contao-pageimage` in the Contao Manager and add it
+Search for `terminal42/contao-rootcontent` in the Contao Manager and add it
 to your installation. Apply changes to update the packages.
 
 ### Manual installation

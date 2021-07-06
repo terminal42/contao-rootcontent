@@ -9,7 +9,7 @@ Choose the installation method that matches your workflow!
 
 ### Installation via Contao Manager
 
-Search for `terminal42/contao-pageimage` in the Contao Manager and add it
+Search for `terminal42/contao-rootcontent` in the Contao Manager and add it
 to your installation. Apply changes to update the packages.
 
 ### Manual installation
@@ -18,7 +18,7 @@ Add a composer dependency for this bundle. Therefore, change in the project root
 and run the following:
 
 ```bash
-composer require terminal42/contao-pageimage
+composer require terminal42/contao-rootcontent
 ```
 
 Depending on your environment, the command can differ, i.e. starting with

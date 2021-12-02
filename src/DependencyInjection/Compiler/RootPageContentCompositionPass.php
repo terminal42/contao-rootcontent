@@ -20,7 +20,7 @@ class RootPageContentCompositionPass implements CompilerPassInterface
         // Support Contao 4.12+
         $controller = \class_exists(RootPageController::class) ? RootPageController::class : FrontendIndex::class.'::renderPage';
 
-        $pageRegistry = $container->getDefinition(PageRegistry::class);
+        $pageRegistry = $container->findDefinition(PageRegistry::class);
 
         $pageRegistry->addMethodCall('add', [
             'root',

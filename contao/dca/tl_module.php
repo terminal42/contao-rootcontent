@@ -31,5 +31,5 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['rootLimit'] = [
     'label'             => &$GLOBALS['TL_LANG']['tl_module']['rootLimit'],
     'inputType'         => 'checkbox',
     'eval'              => ['multiple' => true, 'tl_class' => 'clr'],
-    'sql'               => ['type' => Types::TEXT, 'length' => MySqlPlatform::LENGTH_LIMIT_TEXT, 'notnull' => false],
+    'sql'               => ['type' => 'text', 'length' => 65535, 'notnull' => false],
 ];

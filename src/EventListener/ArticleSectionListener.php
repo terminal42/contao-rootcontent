@@ -42,7 +42,7 @@ class ArticleSectionListener
         $page = $this->getPage($dc->id);
 
         if ('root' === $page['type']) {
-            $GLOBALS['TL_DCA']['tl_article']['palettes']['default'] = '{title_legend},title,author;{expert_legend:hide},cssID;{publish_legend},published';
+            $GLOBALS['TL_DCA']['tl_article']['palettes']['default'] = '{title_legend},title,author;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID;{publish_legend},published,start,stop';
 
             $theme = $this->getTheme((int) $page['layout']);
 

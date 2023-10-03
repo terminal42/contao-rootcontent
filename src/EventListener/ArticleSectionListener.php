@@ -4,34 +4,25 @@ declare(strict_types=1);
 
 namespace Terminal42\RootcontentBundle\EventListener;
 
-use Contao\Backend;
-use Contao\BackendUser;
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Security;
 
+/**
+ * If the article is in a root page, we show a select menu instead of article name.
+ */
+#[AsCallback(table: 'tl_article', target: 'config.onload')]
 class ArticleSectionListener
 {
-    private RequestStack $requestStack;
-    private Connection $database;
-    private Security $security;
-
-    public function __construct(RequestStack $requestStack, Connection $database, Security $security)
-    {
-        $this->requestStack = $requestStack;
-        $this->database = $database;
-        $this->security = $security;
+    public function __construct(
+        private readonly RequestStack $requestStack,
+        private readonly Connection $database,
+    ) {
     }
 
-    /**
-     * If the article is in a root page, we show a select menu instead of article name.
-     *
-     * @Callback(table="tl_article", target="config.onload")
-     */
-    public function onLoad(DataContainer $dc): void
+    public function __invoke(DataContainer $dc): void
     {
         $request = $this->requestStack->getCurrentRequest();
 
@@ -48,7 +39,7 @@ class ArticleSectionListener
 
             $sections = array_diff(
                 StringUtil::deserialize($theme['rootcontent'], true),
-                $this->getExistingSections((int) $page['id'], (int) $dc->id)
+                $this->getExistingSections((int) $page['id'], (int) $dc->id),
             );
 
             $GLOBALS['TL_DCA']['tl_article']['fields']['title'] = [
@@ -60,50 +51,7 @@ class ArticleSectionListener
         }
     }
 
-    /**
-     * Overrides parent function, allow paste for root pages.
-     *
-     * @param mixed $circularReference
-     * @param mixed $arrClipboard
-     *
-     * @deprecated only used for Contao < 4.11
-     */
-    public function onPasteButton(DataContainer $dc, array $row, string $table, $circularReference, $arrClipboard = false): string
-    {
-        $user = $this->security->getUser();
-
-        if ('tl_page' === $table
-            && 'root' === $row['type']
-            && $user instanceof BackendUser
-            && ($user->isAdmin || $user->isAllowed(5, $row))
-            && !$circularReference
-        ) {
-            $theme = $this->getTheme((int) $row['layout']);
-
-            $sections = array_diff(
-                StringUtil::deserialize($theme['rootcontent'], true),
-                $this->getExistingSections((int) $row['id'])
-            );
-
-            if (!empty($sections)) {
-                return '<a href="'.Backend::addToUrl('act='.$arrClipboard['mode'].'&amp;mode=2&amp;pid='.$row['id'].(!\is_array($arrClipboard['id']) ? '&amp;id='.$arrClipboard['id'] : '')).'" title="'.StringUtil::specialchars(sprintf($GLOBALS['TL_LANG'][$dc->table]['pasteinto'][1], $row['id'])).'" onclick="Backend.getScrollOffset();">'.Backend::generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$dc->table]['pasteinto'][1], $row['id']), 'class="blink"').'</a> ';
-            }
-
-            return Backend::generateImage('pasteinto_.gif', '', 'class="blink"').' ';
-        }
-
-        if ('tl_article' === $table) {
-            $page = $this->getPage((int) $row['id']);
-
-            if ('root' === $page['type']) {
-                return Backend::generateImage('pasteafter_.gif', '', 'class="blink"').' ';
-            }
-        }
-
-        return (new \tl_article())->pasteArticle($dc, $row, $table, $circularReference, $arrClipboard);
-    }
-
-    private function getPage($articleId): ?array
+    private function getPage($articleId): array|null
     {
         $qb = $this->database->createQueryBuilder();
 
@@ -115,10 +63,10 @@ class ArticleSectionListener
             ->setParameter('articleId', $articleId)
         ;
 
-        return $qb->execute()->fetchAssociative() ?: null;
+        return $qb->fetchAssociative() ?: null;
     }
 
-    private function getTheme(int $layoutId): ?array
+    private function getTheme(int $layoutId): array|null
     {
         $qb = $this->database->createQueryBuilder();
 
@@ -130,7 +78,7 @@ class ArticleSectionListener
             ->setParameter('layout_id', $layoutId)
         ;
 
-        return $qb->execute()->fetchAssociative() ?: null;
+        return $qb->fetchAssociative() ?: null;
     }
 
     private function getExistingSections(int $pageId, int $articleId = 0): array
@@ -146,6 +94,6 @@ class ArticleSectionListener
             ->setParameter('article_id', $articleId)
         ;
 
-        return $qb->execute()->fetchFirstColumn();
+        return $qb->fetchFirstColumn();
     }
 }

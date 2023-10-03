@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Terminal42\RootcontentBundle\EventListener;
 
-use Contao\CoreBundle\ServiceAnnotation\Callback;
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Model;
 use Contao\ModuleModel;
 use Contao\PageModel;
@@ -14,18 +14,14 @@ use Doctrine\DBAL\Connection;
 
 class RootLimitListener
 {
-    private Connection $database;
-
-    public function __construct(Connection $database)
+    public function __construct(private readonly Connection $database)
     {
-        $this->database = $database;
     }
 
     /**
      * Gets the root pages.
-     *
-     * @Callback(table="tl_module", target="fields.rootLimit.options")
      */
+    #[AsCallback(table: 'tl_module', target: 'fields.rootLimit.options')]
     public function onRootLimitOptions(): array
     {
         $qb = $this->database->createQueryBuilder();
@@ -38,6 +34,7 @@ class RootLimitListener
         ;
 
         $pages = [];
+
         foreach ($qb->execute()->fetchAllAssociative() as $row) {
             $label = $row['title'];
 
@@ -53,9 +50,8 @@ class RootLimitListener
 
     /**
      * Checks if a frontend module has been limited for root pages.
-     *
-     * @Hook("isVisibleElement")
      */
+    #[AsHook('isVisibleElement')]
     public function onIsVisibleElement(Model $model, bool $isVisible): bool
     {
         if ($model instanceof ModuleModel && $model->defineRootLimit) {

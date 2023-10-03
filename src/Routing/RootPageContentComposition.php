@@ -12,13 +12,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class RootPageContentComposition implements ContentCompositionInterface
 {
-    private Connection $connection;
-    private RequestStack $requestStack;
-
-    public function __construct(Connection $connection, RequestStack $requestStack)
-    {
-        $this->connection = $connection;
-        $this->requestStack = $requestStack;
+    public function __construct(
+        private readonly Connection $connection,
+        private readonly RequestStack $requestStack,
+    ) {
     }
 
     public function supportsContentComposition(PageModel $pageModel): bool
@@ -52,13 +49,13 @@ class RootPageContentComposition implements ContentCompositionInterface
         $usedSections = $qb->execute()->fetchFirstColumn();
 
         // Always show the "articles" button in the page tree
-        if (($request = $this->requestStack->getMasterRequest()) && 'page' === $request->get('do')) {
+        if (($request = $this->requestStack->getMainRequest()) && 'page' === $request->get('do')) {
             return !empty($definedSections);
         }
 
         return !empty($definedSections) && \count(array_diff(
             $definedSections,
-            $usedSections
+            $usedSections,
         )) > 0;
     }
 }

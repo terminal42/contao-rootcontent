@@ -12,9 +12,6 @@ use Terminal42\RootcontentBundle\Terminal42RootcontentBundle;
 
 class Plugin implements BundlePluginInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getBundles(ParserInterface $parser)
     {
         return [

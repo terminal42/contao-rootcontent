@@ -2,6 +2,7 @@
     "name": "terminal42/contao-rootcontent",
     "type": "contao-bundle",
     "description": "Allows creating root-page aware content in Contao",
+    "keywords": ["contao", "article", "content", "module"],
     "license": "MIT",
     "authors": [
         {
@@ -21,18 +22,16 @@
     ],
     "support": {
         "issues": "https://github.com/terminal42/contao-rootcontent/issues",
-        "forum": "https://community.contao.org",
-        "source": "https://github.com/terminal42/contao-rootcontent"
+        "source": "https://github.com/terminal42/contao-rootcontent",
+        "forum": "https://community.contao.org"
     },
     "require": {
-        "php": "^7.4 || ^8.0",
-        "contao/core-bundle": "~4.9.10 || ^4.10.5",
-        "composer/semver": "^3.2",
-        "composer-runtime-api": "^2"
+        "php": "^8.1",
+        "contao/core-bundle": "^4.13 || ^5.0"
     },
     "require-dev": {
         "contao/manager-plugin": "^2.0",
-        "contao/easy-coding-standard": "^3.0"
+        "terminal42/contao-build-tools": "dev-main"
     },
     "conflict": {
         "contao/manager-plugin": "<2.0 || >=3.0"
@@ -44,10 +43,5 @@
     },
     "extra": {
         "contao-manager-plugin": "Terminal42\\RootcontentBundle\\ContaoManager\\Plugin"
-    },
-    "scripts": {
-        "cs-fixer": [
-            "vendor/bin/ecs check src/ --fix --ansi"
-        ]
     }
 }

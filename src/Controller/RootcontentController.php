@@ -7,8 +7,8 @@ namespace Terminal42\RootcontentBundle\Controller;
 use Contao\ArticleModel;
 use Contao\Controller;
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
-use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
 use Contao\Date;
 use Contao\ModuleModel;
 use Contao\PageModel;
@@ -16,19 +16,14 @@ use Contao\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @FrontendModule(category="miscellaneous")
- */
+#[AsFrontendModule(template: 'mod_rootcontent')]
 class RootcontentController extends AbstractFrontendModuleController
 {
-    private TokenChecker $tokenChecker;
-
-    public function __construct(TokenChecker $tokenChecker)
+    public function __construct(private readonly TokenChecker $tokenChecker)
     {
-        $this->tokenChecker = $tokenChecker;
     }
 
-    protected function getResponse(Template $template, ModuleModel $model, Request $request): ?Response
+    protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
     {
         $pageModel = $this->getPageModel();
 
@@ -47,7 +42,7 @@ class RootcontentController extends AbstractFrontendModuleController
         return $template->getResponse();
     }
 
-    private function getArticle($rootPageId, $section): ?ArticleModel
+    private function getArticle($rootPageId, $section): ArticleModel|null
     {
         $cols = ['tl_article.pid=?', 'tl_article.title=?'];
 
@@ -58,7 +53,7 @@ class RootcontentController extends AbstractFrontendModuleController
 
         return ArticleModel::findOneBy(
             $cols,
-            [$rootPageId, $section]
+            [$rootPageId, $section],
         );
     }
 }

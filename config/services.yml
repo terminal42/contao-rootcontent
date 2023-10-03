@@ -14,7 +14,6 @@ services:
         arguments:
             - '@request_stack'
             - '@database_connection'
-            - '@security.helper'
 
     Terminal42\RootcontentBundle\EventListener\ModuleFieldListener: ~
 

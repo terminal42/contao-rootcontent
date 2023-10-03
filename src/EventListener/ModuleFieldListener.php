@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Terminal42\RootcontentBundle\EventListener;
 
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 
-/**
- * @Callback(table="tl_module", target="config.onload")
- */
+#[AsCallback(table: 'tl_module', target: 'config.onload')]
 class ModuleFieldListener
 {
     public function __invoke(): void
@@ -17,10 +15,10 @@ class ModuleFieldListener
         $pm = PaletteManipulator::create()->addField(
             'defineRootLimit',
             'protected_legend',
-            PaletteManipulator::POSITION_APPEND
+            PaletteManipulator::POSITION_APPEND,
         );
 
-        foreach ($GLOBALS['TL_DCA']['tl_module']['palettes'] as $name => $palette) {
+        foreach (array_keys($GLOBALS['TL_DCA']['tl_module']['palettes']) as $name) {
             if ('__selector__' !== $name && 'default' !== $name) {
                 $pm->applyToPalette($name, 'tl_module');
             }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Terminal42\RootcontentBundle\EventListener;
 
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
@@ -12,18 +12,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ModuleSectionsListener
 {
-    private RequestStack $requestStack;
-    private Connection $database;
-
-    public function __construct(RequestStack $requestStack, Connection $database)
-    {
-        $this->requestStack = $requestStack;
-        $this->database = $database;
+    public function __construct(
+        private readonly RequestStack $requestStack,
+        private readonly Connection $database,
+    ) {
     }
 
-    /**
-     * @Callback(table="tl_module", target="fields.rootcontent.options")
-     */
+    #[AsCallback(table: 'tl_module', target: 'fields.rootcontent.options')]
     public function onOptionsCallback(DataContainer $dc): array
     {
         $qb = $this->database->createQueryBuilder();

@@ -31,7 +31,7 @@ class RootcontentController extends AbstractFrontendModuleController
             return new Response('');
         }
 
-        $article = $this->getArticle($pageModel->rootId, $model->rootcontent);
+        $article = $this->getArticle((int) $pageModel->rootId, $model->rootcontent);
 
         if (null === $article) {
             return new Response('');
@@ -42,7 +42,7 @@ class RootcontentController extends AbstractFrontendModuleController
         return $template->getResponse();
     }
 
-    private function getArticle($rootPageId, $section): ArticleModel|null
+    private function getArticle(int $rootPageId, string $section): ArticleModel|null
     {
         $cols = ['tl_article.pid=?', 'tl_article.title=?'];
 

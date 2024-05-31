@@ -16,7 +16,7 @@ class RootCssClassListener
 {
     public function __invoke(PageModel $objPage, LayoutModel $objLayout): void
     {
-        $rootPage = PageModel::findByPk($objPage->rootId);
+        $rootPage = PageModel::findById($objPage->rootId);
 
         if (null !== $rootPage && $cssClass = $rootPage->cssClass) {
             $objLayout->cssClass = $cssClass.' '.$objLayout->cssClass;

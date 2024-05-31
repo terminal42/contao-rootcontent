@@ -30,7 +30,7 @@ class ArticleSectionListener
             return;
         }
 
-        $page = $this->getPage($dc->id);
+        $page = $this->getPage((int) $dc->id);
 
         if ('root' === $page['type']) {
             $GLOBALS['TL_DCA']['tl_article']['palettes']['default'] = '{title_legend},title,author;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID;{publish_legend},published,start,stop';
@@ -51,10 +51,9 @@ class ArticleSectionListener
         }
     }
 
-    private function getPage($articleId): array|null
+    private function getPage(int $articleId): array|null
     {
         $qb = $this->database->createQueryBuilder();
-
         $qb
             ->select('tl_page.*')
             ->from('tl_article')
@@ -69,7 +68,6 @@ class ArticleSectionListener
     private function getTheme(int $layoutId): array|null
     {
         $qb = $this->database->createQueryBuilder();
-
         $qb
             ->select('tl_theme.*')
             ->from('tl_theme')
@@ -84,7 +82,6 @@ class ArticleSectionListener
     private function getExistingSections(int $pageId, int $articleId = 0): array
     {
         $qb = $this->database->createQueryBuilder();
-
         $qb
             ->select('title')
             ->from('tl_article')

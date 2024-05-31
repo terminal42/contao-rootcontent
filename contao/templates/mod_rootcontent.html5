@@ -1,1 +1,1 @@
-<?= $this->article ?>
+<?= $this->article;

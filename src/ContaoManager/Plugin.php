@@ -12,7 +12,7 @@ use Terminal42\RootcontentBundle\Terminal42RootcontentBundle;
 
 class Plugin implements BundlePluginInterface
 {
-    public function getBundles(ParserInterface $parser)
+    public function getBundles(ParserInterface $parser): array
     {
         return [
             BundleConfig::create(Terminal42RootcontentBundle::class)->setLoadAfter([ContaoCoreBundle::class]),

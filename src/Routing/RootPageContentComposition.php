@@ -38,7 +38,6 @@ class RootPageContentComposition implements ContentCompositionInterface
         $definedSections = StringUtil::deserialize($qb->execute()->fetchOne(), true);
 
         $qb = $this->connection->createQueryBuilder();
-
         $qb
             ->select('title')
             ->from('tl_article')

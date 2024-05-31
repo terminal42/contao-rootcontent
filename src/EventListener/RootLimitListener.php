@@ -25,7 +25,6 @@ class RootLimitListener
     public function onRootLimitOptions(): array
     {
         $qb = $this->database->createQueryBuilder();
-
         $qb
             ->select('id, title, dns, language')
             ->from('tl_page')

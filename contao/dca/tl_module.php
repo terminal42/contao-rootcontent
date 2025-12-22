@@ -14,7 +14,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['rootcontent'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_module']['rootcontent'],
     'inputType' => 'select',
     'eval' => ['mandatory' => true, 'includeBlankOption' => true, 'tl_class' => 'w50'],
-    'sql' => ['type' => 'string', 'default' => ''],
+    'sql' => ['type' => 'string', 'length' => 255, 'default' => ''],
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['defineRootLimit'] = [

@@ -35,7 +35,7 @@ class RootPageContentComposition implements ContentCompositionInterface
             ->setParameter('layout_id', $pageModel->layout)
         ;
 
-        $definedSections = StringUtil::deserialize($qb->execute()->fetchOne(), true);
+        $definedSections = StringUtil::deserialize($qb->fetchOne(), true);
 
         $qb = $this->connection->createQueryBuilder();
         $qb
@@ -45,7 +45,7 @@ class RootPageContentComposition implements ContentCompositionInterface
             ->setParameter('page_id', $pageModel->id)
         ;
 
-        $usedSections = $qb->execute()->fetchFirstColumn();
+        $usedSections = $qb->fetchFirstColumn();
 
         // Always show the "articles" button in the page tree
         if (($request = $this->requestStack->getMainRequest()) && 'page' === $request->get('do')) {

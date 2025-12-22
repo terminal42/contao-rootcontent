@@ -20,6 +20,8 @@ class RootLimitListener
 
     /**
      * Gets the root pages.
+     *
+     * @return array<int, string>
      */
     #[AsCallback(table: 'tl_module', target: 'fields.rootLimit.options')]
     public function onRootLimitOptions(): array
@@ -34,7 +36,7 @@ class RootLimitListener
 
         $pages = [];
 
-        foreach ($qb->execute()->fetchAllAssociative() as $row) {
+        foreach ($qb->fetchAllAssociative() as $row) {
             $label = $row['title'];
 
             if ($row['dns']) {

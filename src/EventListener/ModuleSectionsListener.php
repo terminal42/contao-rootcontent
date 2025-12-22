@@ -18,6 +18,9 @@ class ModuleSectionsListener
     ) {
     }
 
+    /**
+     * @return array<string>
+     */
     #[AsCallback(table: 'tl_module', target: 'fields.rootcontent.options')]
     public function onOptionsCallback(DataContainer $dc): array
     {
@@ -29,7 +32,7 @@ class ModuleSectionsListener
             ->setParameter('id', $this->getThemeId($dc))
         ;
 
-        return StringUtil::deserialize($qb->execute()->fetchOne(), true);
+        return StringUtil::deserialize($qb->fetchOne(), true);
     }
 
     private function getThemeId(DataContainer $dc): int

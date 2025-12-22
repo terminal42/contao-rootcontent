@@ -51,6 +51,9 @@ class ArticleSectionListener
         }
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     private function getPage(int $articleId): array|null
     {
         $qb = $this->database->createQueryBuilder();
@@ -65,6 +68,9 @@ class ArticleSectionListener
         return $qb->fetchAssociative() ?: null;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     private function getTheme(int $layoutId): array|null
     {
         $qb = $this->database->createQueryBuilder();
@@ -79,6 +85,9 @@ class ArticleSectionListener
         return $qb->fetchAssociative() ?: null;
     }
 
+    /**
+     * @return array<string>
+     */
     private function getExistingSections(int $pageId, int $articleId = 0): array
     {
         $qb = $this->database->createQueryBuilder();
